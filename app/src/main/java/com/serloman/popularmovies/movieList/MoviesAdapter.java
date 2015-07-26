@@ -112,6 +112,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
         this.notifyDataSetChanged();
     }
 
+    public void clear(){
+        this.mMovieDataSet.clear();
+
+        this.notifyDataSetChanged();
+    }
+
     public static class MovieHolder extends RecyclerView.ViewHolder{
 
         interface MovieClickedListener{

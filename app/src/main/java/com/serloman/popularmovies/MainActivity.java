@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.serloman.popularmovies.data.FavouriteMovies;
 import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
 import com.serloman.popularmovies.movieDetails.MovieDetailsActivity;
 import com.serloman.popularmovies.movieList.BasicMovieListFragment;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
 
     public final static int TYPE_POPULARITY = 0;
     public final static int TYPE_RATED = 1;
+    public final static int TYPE_FAV = 2;
 
     private Toolbar mToolbar;
 
@@ -84,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
             case R.id.action_sort_by_most_rated:
                 selectFragment(TYPE_RATED);
                 return true;
+            case R.id.action_sort_by_favourites:
+                selectFragment(TYPE_FAV);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -100,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
                 break;
             case TYPE_RATED:
                 fragment = RatedMoviesFragment.newInstance();
+                break;
+            case TYPE_FAV:
+                fragment = FavouriteMoviesFragment.newInstance();
                 break;
 
             default:
@@ -129,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
             case TYPE_RATED:
                 title = getString(R.string.label_most_rated);
                 break;
+            case TYPE_FAV:
+                title = getString(R.string.label_favourites);
+                break;
             default:
                 title = "undefined";
                 break;
@@ -153,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
             selectFragment(TYPE_POPULARITY);
         else if(name.compareTo(getString(R.string.label_most_rated))==0)
             selectFragment(TYPE_RATED);
+        else if(name.compareTo(getString(R.string.label_favourites))==0)
+            selectFragment(TYPE_FAV);
     }
 
     @Deprecated

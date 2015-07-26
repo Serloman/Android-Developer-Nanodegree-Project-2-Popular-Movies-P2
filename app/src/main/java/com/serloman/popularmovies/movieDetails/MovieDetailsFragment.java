@@ -19,6 +19,9 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 
 import com.serloman.popularmovies.DefaultTheMovieDbApi;
 import com.serloman.popularmovies.R;
+import com.serloman.popularmovies.data.FavouriteMovies;
 import com.serloman.popularmovies.gallery.GalleryActivity;
 import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
 import com.serloman.popularmovies.models.ParcelableImageMovie;
@@ -66,6 +70,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     private FullMovie mMovie;
     private ViewPager mViewPager;
     private PagerAdapter mAdapter;
+    private MenuItem mButtonFav;
 
     public MovieDetailsFragment() { }
 
@@ -83,6 +88,8 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         getLoaderManager().initLoader(0, null, this);
 
         initBasicData();
+
+        setHasOptionsMenu(true);
     }
 
     private void initBasicData(){
@@ -282,8 +289,61 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     }
 
     private void initReviews(Movie movie){
-        ReviewsFragment fragment = ReviewsFragment.newInstance(movie);
-        getChildFragmentManager().beginTransaction().replace(R.id.movieDetailsReviewsContainer, fragment).commit();
+//        ReviewsFragment fragment = ReviewsFragment.newInstance(movie);
+//        getChildFragmentManager().beginTransaction().replace(R.id.movieDetailsReviewsContainer, fragment).commit();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_movie_details, menu);
+
+        mButtonFav = menu.findItem(R.id.action_fav);
+        updateFavButton();
+    }
+
+    private boolean isFavMovie(){
+        FavouriteMovies fav = new FavouriteMovies(getActivity());
+        return fav.isFavourited(getBasicMovieData().getId());
+    }
+
+    private void updateFavButton(){
+        if(isFavMovie())
+            mButtonFav.setIcon(R.drawable.ic_action_important);
+        else
+            mButtonFav.setIcon(R.drawable.ic_action_not_important);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_fav:
+                favAction();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void favAction(){
+        if(isFavMovie())
+            unfavMovie();
+        else
+            favMovie();
+    }
+
+    private void favMovie(){
+        FavouriteMovies fav = new FavouriteMovies(getActivity());
+        long idRow = fav.saveFavourite(getBasicMovieData());
+
+        mButtonFav.setIcon(R.drawable.ic_action_important);
+    }
+
+    private void unfavMovie(){
+        FavouriteMovies fav = new FavouriteMovies(getActivity());
+        fav.deleteFavourite(getBasicMovieData());
+
+        mButtonFav.setIcon(R.drawable.ic_action_not_important);
     }
 
     private static class TakeListLoader extends AsyncTaskLoader<FullMovie> {

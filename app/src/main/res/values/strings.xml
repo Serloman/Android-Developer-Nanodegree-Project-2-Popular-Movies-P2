@@ -3,9 +3,11 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_sort_by">Sort By</string>
+    <string name="action_fav">Fav</string>
 
     <string name="label_popularity">Most Popular</string>
     <string name="label_most_rated">Most Rated</string>
+    <string name="label_favourites">Favourites</string>
 
     <string name="error_getting_movie">There was an error trying to get the movie info</string>
     <string name="error_image_movie">There was an error trying to get the image</string>

@@ -11,6 +11,7 @@
         <menu>
             <item android:id="@+id/action_sort_by_popularity" android:title="@string/label_popularity" />
             <item android:id="@+id/action_sort_by_most_rated" android:title="@string/label_most_rated" />
+            <item android:id="@+id/action_sort_by_favourites" android:title="@string/label_favourites" />
         </menu>
     </item>
 
