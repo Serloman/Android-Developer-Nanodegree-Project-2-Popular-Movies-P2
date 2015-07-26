@@ -35,6 +35,7 @@ public abstract class BasicMovieListFragment extends Fragment implements MovieLi
     public static final String ARG_PORTRAIT_SPAN_COUNT = "ARG_PORTRAIT_SPAN_COUNT";
     public static final String ARG_LANDSCAPE_SPAN_COUNT = "ARG_LANDSCAPE_SPAN_COUNT";
     public static final int LOADER_ID = 0;
+    private static final String VAR_LOADED = "VAR_LOADED";
 
     public BasicMovieListFragment(){ }
 
@@ -42,6 +43,16 @@ public abstract class BasicMovieListFragment extends Fragment implements MovieLi
     private MoviesAdapter mMoviesAdapter;
     private OpenMovieListener mListener;
     private EndlessScrollListener mEndlessScrollListener;
+    private boolean loaded;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        loaded = false;
+        if(savedInstanceState!=null)
+            loaded = savedInstanceState.getBoolean(VAR_LOADED, false);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,10 +64,12 @@ public abstract class BasicMovieListFragment extends Fragment implements MovieLi
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        if(!loaded)
+            getLoaderManager().initLoader(LOADER_ID, null, this);
+        loaded = true;
     }
 
     @Override
@@ -68,6 +81,13 @@ public abstract class BasicMovieListFragment extends Fragment implements MovieLi
         }catch (ClassCastException ex){
             throw new ClassCastException(activity.toString() + " must implement BasicMovieListFragment.OpenMovieListener interface");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(VAR_LOADED, loaded);
     }
 
     private void initRecyclerGridView(View rootView){
