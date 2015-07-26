@@ -5,6 +5,7 @@ import com.serloman.themoviedb_api.models.FullMovieApi;
 import com.serloman.themoviedb_api.models.MovieImagesApi;
 import com.serloman.themoviedb_api.models.MovieListApi;
 import com.serloman.themoviedb_api.models.MovieVideosApi;
+import com.serloman.themoviedb_api.models.ReviewMovieListApi;
 
 import retrofit.http.GET;
 import retrofit.http.Path;
@@ -34,4 +35,7 @@ public interface TheMovieDb_Service {
 
     @GET("/movie/{movie}/credits")
     CreditsMovieApi creditsMovie(@Path("movie") String movie, @Query("api_key") String api_key);
+
+    @GET("/movie/{movie}/reviews")
+    ReviewMovieListApi reviewsMovie(@Path("movie") String movie, @Query("api_key") String api_key);
 }

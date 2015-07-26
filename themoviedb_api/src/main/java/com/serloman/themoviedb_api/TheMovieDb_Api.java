@@ -13,6 +13,8 @@ import com.serloman.themoviedb_api.calls.MovieCreditsCallback;
 import com.serloman.themoviedb_api.calls.MovieListCallback;
 import com.serloman.themoviedb_api.calls.MovieImagesAsyncTask;
 import com.serloman.themoviedb_api.calls.MovieImagesCallback;
+import com.serloman.themoviedb_api.calls.MovieReviewsAsyncTask;
+import com.serloman.themoviedb_api.calls.MovieReviewsCallback;
 import com.serloman.themoviedb_api.calls.MovieVideosAsyncTask;
 import com.serloman.themoviedb_api.calls.MovieVideosCallback;
 import com.serloman.themoviedb_api.calls.PopularMoviesAsyncTask;
@@ -23,6 +25,8 @@ import com.serloman.themoviedb_api.models.Movie;
 import com.serloman.themoviedb_api.models.MovieListApi;
 import com.serloman.themoviedb_api.models.MovieImages;
 import com.serloman.themoviedb_api.models.MovieVideos;
+import com.serloman.themoviedb_api.models.ReviewMovie;
+import com.serloman.themoviedb_api.models.ReviewMovieListApi;
 import com.serloman.themoviedb_api.models.VideoMovie;
 
 import java.io.IOException;
@@ -225,6 +229,31 @@ public class TheMovieDb_Api {
         MovieCreditsAsyncTask task = new MovieCreditsAsyncTask(mService, mApiKey, creditsCallback);
         task.execute(idMovie);
     }
+
+
+    public List<Movie> getReviewsMovie() throws IOException {
+        return getTopRatedMovies(1);
+    }
+
+    public List<ReviewMovie> getReviewsMovie(int page) throws IOException {
+        checkNetwork();
+
+        ReviewMovieListApi moviesApi = mService.reviewsMovie(String.valueOf(page), mApiKey);
+        return moviesApi.getReviews();
+    }
+
+    public void getReviewsMovieAsync(MovieReviewsCallback reviewsCallback){
+        getReviewsMovieAsync(1, reviewsCallback);
+    }
+
+    public void getReviewsMovieAsync(int page, MovieReviewsCallback reviewsCallback) {
+        if (!isNetworkAvailable(reviewsCallback))
+            return;
+
+        MovieReviewsAsyncTask task = new MovieReviewsAsyncTask(mService, mApiKey, reviewsCallback);
+        task.execute(String.valueOf(page));
+    }
+
 
     /**
      * Based on solutions provided in:
