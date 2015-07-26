@@ -1,4 +1,4 @@
-# Project 1: Popular Movies P1
+# Project 2: Popular Movies P2
 An app to help users discover popular and recent movies. It has a clean UI, sync to a server, and present information to the user.
 
 #External dependencies used:
