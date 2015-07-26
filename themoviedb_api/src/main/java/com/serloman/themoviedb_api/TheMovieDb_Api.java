@@ -231,27 +231,31 @@ public class TheMovieDb_Api {
     }
 
 
-    public List<Movie> getReviewsMovie() throws IOException {
-        return getTopRatedMovies(1);
+    public List<ReviewMovie> getReviewsMovie(String idMovie) throws IOException {
+        return getReviewsMovie(idMovie, 1);
     }
 
-    public List<ReviewMovie> getReviewsMovie(int page) throws IOException {
+    public List<ReviewMovie> getReviewsMovie(String idMovie, int page) throws IOException {
         checkNetwork();
 
-        ReviewMovieListApi moviesApi = mService.reviewsMovie(String.valueOf(page), mApiKey);
+        ReviewMovieListApi moviesApi = mService.reviewsMovie(idMovie, String.valueOf(page), mApiKey);
         return moviesApi.getReviews();
     }
 
-    public void getReviewsMovieAsync(MovieReviewsCallback reviewsCallback){
-        getReviewsMovieAsync(1, reviewsCallback);
+    public void getReviewsMovieAsync(int idMovie, MovieReviewsCallback reviewsCallback){
+        getReviewsMovieAsync(String.valueOf(idMovie), reviewsCallback);
     }
 
-    public void getReviewsMovieAsync(int page, MovieReviewsCallback reviewsCallback) {
+    public void getReviewsMovieAsync(String idMovie, MovieReviewsCallback reviewsCallback){
+        getReviewsMovieAsync(idMovie, 1, reviewsCallback);
+    }
+
+    public void getReviewsMovieAsync(String idMovie, int page, MovieReviewsCallback reviewsCallback) {
         if (!isNetworkAvailable(reviewsCallback))
             return;
 
         MovieReviewsAsyncTask task = new MovieReviewsAsyncTask(mService, mApiKey, reviewsCallback);
-        task.execute(String.valueOf(page));
+        task.execute(idMovie, String.valueOf(page));
     }
 
 

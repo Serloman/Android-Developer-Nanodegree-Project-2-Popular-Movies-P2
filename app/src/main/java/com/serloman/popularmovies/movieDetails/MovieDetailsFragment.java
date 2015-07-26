@@ -30,6 +30,7 @@ import com.serloman.popularmovies.R;
 import com.serloman.popularmovies.gallery.GalleryActivity;
 import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
 import com.serloman.popularmovies.models.ParcelableImageMovie;
+import com.serloman.popularmovies.reviews.ReviewsFragment;
 import com.serloman.themoviedb_api.calls.MovieCallback;
 import com.serloman.themoviedb_api.calls.MovieImagesCallback;
 import com.serloman.themoviedb_api.calls.MovieVideosCallback;
@@ -91,6 +92,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         initBackDrop(movie);
         initMovieData(movie);
         initGallery(movie);
+        initReviews(movie);
     }
 
     private Movie getBasicMovieData(){
@@ -277,6 +279,11 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         String youtubeUrl = "https://www.youtube.com/watch?v=" + trailerInfo.getKey();
 
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl)));
+    }
+
+    private void initReviews(Movie movie){
+        ReviewsFragment fragment = ReviewsFragment.newInstance(movie);
+        getChildFragmentManager().beginTransaction().replace(R.id.movieDetailsReviewsContainer, fragment).commit();
     }
 
     private static class TakeListLoader extends AsyncTaskLoader<FullMovie> {

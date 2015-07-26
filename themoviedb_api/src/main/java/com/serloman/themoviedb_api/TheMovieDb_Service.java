@@ -37,5 +37,5 @@ public interface TheMovieDb_Service {
     CreditsMovieApi creditsMovie(@Path("movie") String movie, @Query("api_key") String api_key);
 
     @GET("/movie/{movie}/reviews")
-    ReviewMovieListApi reviewsMovie(@Path("movie") String movie, @Query("api_key") String api_key);
+    ReviewMovieListApi reviewsMovie(@Path("movie") String movie, @Query("page") String page, @Query("api_key") String api_key);
 }

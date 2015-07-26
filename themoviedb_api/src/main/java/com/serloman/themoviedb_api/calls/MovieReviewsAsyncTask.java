@@ -15,6 +15,9 @@ import java.util.List;
  */
 public class MovieReviewsAsyncTask extends AsyncTask<String, Integer, List<ReviewMovie>> {
 
+    public final static int POS_ARG_ID_MOVIE = 0;
+    public final static int POS_ARG_PAGE = 1;
+
     private TheMovieDb_Service mService;
     private String mApiKey;
     private MovieReviewsCallback mMovieCallback;
@@ -26,9 +29,10 @@ public class MovieReviewsAsyncTask extends AsyncTask<String, Integer, List<Revie
     }
 
     protected List<ReviewMovie> doInBackground(String... args) {
-        String idMovie = args[0];
+        String idMovie = args[POS_ARG_ID_MOVIE];
+        String page = args[POS_ARG_PAGE];
 
-        ReviewMovieList movieVideos = mService.reviewsMovie(idMovie, mApiKey);
+        ReviewMovieList movieVideos = mService.reviewsMovie(idMovie, page, mApiKey);
 
         return movieVideos.getReviews();
     }
