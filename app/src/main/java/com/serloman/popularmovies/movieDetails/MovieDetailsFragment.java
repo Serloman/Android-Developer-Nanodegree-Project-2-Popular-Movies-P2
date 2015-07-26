@@ -31,11 +31,13 @@ import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
 import com.serloman.popularmovies.models.ParcelableImageMovie;
 import com.serloman.themoviedb_api.calls.MovieCallback;
 import com.serloman.themoviedb_api.calls.MovieImagesCallback;
+import com.serloman.themoviedb_api.calls.MovieVideosCallback;
 import com.serloman.themoviedb_api.models.FullMovie;
 import com.serloman.themoviedb_api.models.Genre;
 import com.serloman.themoviedb_api.models.ImageMovie;
 import com.serloman.themoviedb_api.models.Movie;
 import com.serloman.themoviedb_api.models.MovieImages;
+import com.serloman.themoviedb_api.models.VideoMovie;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -45,7 +47,7 @@ import java.util.List;
 /**
  * Created by Serloman on 20/07/2015.
  */
-public class MovieDetailsFragment extends Fragment implements MovieCallback, LoaderManager.LoaderCallbacks<FullMovie>, MovieImagesCallback {
+public class MovieDetailsFragment extends Fragment implements MovieCallback, LoaderManager.LoaderCallbacks<FullMovie>, MovieImagesCallback, MovieVideosCallback {
 
     public final static String ARG_MOVIE_DATA = "ARG_MOVIE_DATA";
 
@@ -141,6 +143,9 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     private void initBackDrop(Movie movie){
         ImageView backDrop = (ImageView) getView().findViewById(R.id.movieDetailsBackdrop);
         Picasso.with(getActivity().getApplicationContext()).load(movie.getBackdropUrl(ImageMovie.Sizes.w500)).into(backDrop);
+
+        DefaultTheMovieDbApi api = new DefaultTheMovieDbApi(getActivity());
+        api.getMovieVideosAsync(movie.getId(), this);
     }
 
     private void initToolbar(Movie movie){
@@ -240,6 +245,26 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     @Override
     public void onLoaderReset(Loader<FullMovie> loader) {
 
+    }
+
+    @Override
+    public void onMovieVideosDataReceived(List<VideoMovie> videos) {
+
+        if(videos.size()>0){
+
+            final VideoMovie trailerInfo = videos.get(0);
+
+            View playIcon = getView().findViewById(R.id.backdropPlayTrailer);
+            playIcon.setVisibility(View.VISIBLE);
+
+            View backdropContainer = getView().findViewById(R.id.backdropContainer);
+            backdropContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), trailerInfo.getName(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private static class TakeListLoader extends AsyncTaskLoader<FullMovie> {

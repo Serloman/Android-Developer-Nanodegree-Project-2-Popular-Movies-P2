@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:foreground="#3000">
+    android:foreground="#3000"
+    android:id="@+id/backdropContainer">
 
     <ProgressBar
         style="?android:attr/progressBarStyle"
@@ -19,5 +20,21 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         app:layout_collapseMode="parallax" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/default_selector_view"
+        android:layout_gravity="center_horizontal" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/backdropPlayTrailer"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_action_play"
+        android:background="@drawable/rounded_dark_button"
+        android:padding="@dimen/single_item_margin"
+        android:visibility="gone" />
 
 </FrameLayout>
