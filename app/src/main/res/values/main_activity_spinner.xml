@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="type_movies_array">
+        <item id="@+id/action_sort_by_popularity">@string/label_popularity</item>
+        <item id="@+id/action_sort_by_most_rated">@string/label_most_rated</item>
+    </string-array>
+</resources>
