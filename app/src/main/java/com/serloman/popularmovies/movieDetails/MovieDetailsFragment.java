@@ -3,6 +3,7 @@ package com.serloman.popularmovies.movieDetails;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -249,11 +250,9 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
     @Override
     public void onMovieVideosDataReceived(List<VideoMovie> videos) {
+        final VideoMovie trailerInfo = getYoutubeTrailer(videos);
 
-        if(videos.size()>0){
-
-            final VideoMovie trailerInfo = videos.get(0);
-
+        if(trailerInfo!=null){
             View playIcon = getView().findViewById(R.id.backdropPlayTrailer);
             playIcon.setVisibility(View.VISIBLE);
 
@@ -261,10 +260,23 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
             backdropContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), trailerInfo.getName(), Toast.LENGTH_SHORT).show();
+                    playYoutubeTrailer(trailerInfo);
                 }
             });
         }
+    }
+
+    private VideoMovie getYoutubeTrailer(List<VideoMovie> videos){
+        for(VideoMovie video : videos)
+            if(video.getSite().toLowerCase().compareTo("youtube")==0)
+                return video;
+        return null;
+    }
+
+    private void playYoutubeTrailer(VideoMovie trailerInfo){
+        String youtubeUrl = "https://www.youtube.com/watch?v=" + trailerInfo.getKey();
+
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl)));
     }
 
     private static class TakeListLoader extends AsyncTaskLoader<FullMovie> {
