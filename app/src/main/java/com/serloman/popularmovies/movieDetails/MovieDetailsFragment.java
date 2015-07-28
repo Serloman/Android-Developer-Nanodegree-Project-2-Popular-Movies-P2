@@ -34,7 +34,6 @@ import com.serloman.popularmovies.data.FavouriteMovies;
 import com.serloman.popularmovies.gallery.GalleryActivity;
 import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
 import com.serloman.popularmovies.models.ParcelableImageMovie;
-import com.serloman.popularmovies.reviews.ReviewsFragment;
 import com.serloman.themoviedb_api.calls.MovieCallback;
 import com.serloman.themoviedb_api.calls.MovieImagesCallback;
 import com.serloman.themoviedb_api.calls.MovieVideosCallback;
@@ -191,8 +190,8 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     }
 
     private int getPaddingSiblings(){
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-            return 480;
+//        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+//            return 480;
         return 120;
     }
 
@@ -220,14 +219,14 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     }
 
     private void openPostersGallery(List<ImageMovie> posters){
-        List<ParcelableImageMovie> parcelablePosters = converToParcelable(posters);
+        List<ParcelableImageMovie> parcelablePosters = convertToParcelable(posters);
 
         Intent postersGallery = new Intent(getActivity(), GalleryActivity.class);
         postersGallery.putParcelableArrayListExtra(GalleryActivity.ARG_IMAGES_MOVIE, (ArrayList<? extends Parcelable>) parcelablePosters);
         startActivity(postersGallery);
     }
 
-    private List<ParcelableImageMovie> converToParcelable(List<ImageMovie> images){
+    private List<ParcelableImageMovie> convertToParcelable(List<ImageMovie> images){
         List<ParcelableImageMovie> parcelableImages = new ArrayList<>();
         for(ImageMovie image : images)
             parcelableImages.add(new ParcelableImageMovie(image));

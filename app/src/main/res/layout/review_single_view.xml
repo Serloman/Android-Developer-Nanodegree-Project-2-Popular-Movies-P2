@@ -6,8 +6,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/single_item_margin"
-        android:background="#8FFF">
+        android:layout_margin="@dimen/single_item_margin">
 
         <TextView
             android:layout_width="wrap_content"

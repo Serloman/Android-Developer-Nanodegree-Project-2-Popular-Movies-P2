@@ -18,7 +18,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details_activity);
 
-        initMovieFragment();
+        if(isFullMode())
+            initFullMovieFragment();
+        else
+            initMovieFragment();
     }
 
     private void initMovieFragment(){
@@ -27,7 +30,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, movieFragment).commit();
     }
 
+    private void initFullMovieFragment(){
+        FullMovieDetailsFragment movieFragment = FullMovieDetailsFragment.newInstance(getMovieData());
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.containerFull, movieFragment).commit();
+    }
+
     private Movie getMovieData(){
         return this.getIntent().getExtras().getParcelable(ARG_MOVIE_DATA);
+    }
+
+    private boolean isFullMode(){
+        return findViewById(R.id.containerFull)!=null;
     }
 }

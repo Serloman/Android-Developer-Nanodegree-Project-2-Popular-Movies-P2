@@ -14,8 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.serloman.popularmovies.data.FavouriteMovies;
 import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
+import com.serloman.popularmovies.movieDetails.FullMovieDetailsFragment;
 import com.serloman.popularmovies.movieDetails.MovieDetailsActivity;
 import com.serloman.popularmovies.movieList.BasicMovieListFragment;
 import com.serloman.themoviedb_api.models.Movie;
@@ -101,23 +101,35 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
         switch (type){
 
             case TYPE_POPULARITY:
-                fragment = PopularMoviesFragment.newInstance();
+                fragment = PopularMoviesFragment.newInstance(getPortraitNumColums(), getLandscapeNumColumns());
                 break;
             case TYPE_RATED:
-                fragment = RatedMoviesFragment.newInstance();
+                fragment = RatedMoviesFragment.newInstance(getPortraitNumColums(), getLandscapeNumColumns());
                 break;
             case TYPE_FAV:
-                fragment = FavouriteMoviesFragment.newInstance();
+                fragment = FavouriteMoviesFragment.newInstance(getPortraitNumColums(), getLandscapeNumColumns());
                 break;
 
             default:
-                fragment = PopularMoviesFragment.newInstance();
+                fragment = PopularMoviesFragment.newInstance(getPortraitNumColums(), getLandscapeNumColumns());
                 break;
         }
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
         updateSubtitle(type);
         savePreference(type);
+    }
+
+    private int getPortraitNumColums(){
+        if(isTablet())
+            return 4;
+        return 2;
+    }
+
+    private int getLandscapeNumColumns(){
+        if(isTablet())
+            return 6;
+        return 4;
     }
 
     private void savePreference(int type){
@@ -150,9 +162,27 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
 
     @Override
     public void openMovie(Movie movie) {
+/** /
+        if(isTablet())
+            openDetailsInFragment(movie);
+        else
+/**/
+            openDetailsInNewActivity(movie);
+    }
+
+    private void openDetailsInNewActivity(Movie movie){
         Intent openMovieIntent = new Intent(this, MovieDetailsActivity.class);
         openMovieIntent.putExtra(MovieDetailsActivity.ARG_MOVIE_DATA, new ParcelableDiscoverMovie(movie));
         startActivity(openMovieIntent);
+    }
+
+    private void openDetailsInFragment(Movie movie){
+        FullMovieDetailsFragment fragment = FullMovieDetailsFragment.newInstance(movie);
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainActivityDetailsContainer, fragment).commit();
+    }
+
+    private boolean isTablet(){
+        return findViewById(R.id.mainActivityDetailsContainer) != null;
     }
 
     @Deprecated

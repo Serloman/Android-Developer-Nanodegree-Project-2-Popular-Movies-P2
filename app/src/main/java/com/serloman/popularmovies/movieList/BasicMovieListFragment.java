@@ -104,11 +104,11 @@ public abstract class BasicMovieListFragment extends Fragment implements MovieLi
     }
 
     private int getPortraitSpanCount(){
-        return this.getArguments().getInt(ARG_PORTRAIT_SPAN_COUNT, 2);
+        return this.getArguments().getInt(ARG_PORTRAIT_SPAN_COUNT, 3);
     }
 
     private int getLandscapeSpanCount(){
-        return this.getArguments().getInt(ARG_LANDSCAPE_SPAN_COUNT, 4);
+        return this.getArguments().getInt(ARG_LANDSCAPE_SPAN_COUNT, 5);
     }
 
     private int getSpanColumn(){
