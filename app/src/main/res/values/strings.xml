@@ -16,4 +16,7 @@
     <string name="homepage">Homepage</string>
 
     <string name="notify_user_network_error">There was an error trying to get the data</string>
+
+    <string name="cast">Cast</string>
+    <string name="reviews">Reviews</string>
 </resources>

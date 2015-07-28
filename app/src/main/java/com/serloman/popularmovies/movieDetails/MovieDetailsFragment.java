@@ -190,8 +190,8 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     }
 
     private int getPaddingSiblings(){
-//        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-//            return 480;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+            return 240; //return 480;
         return 120;
     }
 

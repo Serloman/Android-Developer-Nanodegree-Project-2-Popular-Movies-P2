@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -10,8 +12,45 @@
         android:layout_weight="4"></FrameLayout>
 
     <FrameLayout
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:background="@color/title_color"></FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
-        android:id="@+id/fullMovieReviews"></FrameLayout>
+        android:layout_weight="5">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/title_color"
+                app:title="@string/cast" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fullMovieCast"
+            android:layout_weight="1"></FrameLayout>
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/title_color"
+            app:title="@string/reviews"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fullMovieReviews"
+            android:layout_weight="1"></FrameLayout>
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.serloman.popularmovies.R;
+import com.serloman.popularmovies.cast.CastFragment;
 import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
 import com.serloman.popularmovies.reviews.ReviewsFragment;
 import com.serloman.themoviedb_api.models.Movie;
@@ -45,6 +46,7 @@ public class FullMovieDetailsFragment extends Fragment {
         super.onStart();
 
         initDetails();
+        initCast();
         initReviews();
     }
 
@@ -56,6 +58,11 @@ public class FullMovieDetailsFragment extends Fragment {
     private void initReviews(){
         ReviewsFragment reviews = ReviewsFragment.newInstance(getMovie());
         updateFragment(reviews, R.id.fullMovieReviews);
+    }
+
+    private void initCast(){
+        CastFragment cast = CastFragment.newInstance(getMovie());
+        updateFragment(cast, R.id.fullMovieCast);
     }
 
     private void updateFragment(Fragment fragment, int layoutId){
