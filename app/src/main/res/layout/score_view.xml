@@ -53,4 +53,10 @@
                 android:id="@+id/scoreVoteCountTextView" />
         </LinearLayout>
     </LinearLayout>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/default_selector_view"
+        android:layout_gravity="center_horizontal" />
 </FrameLayout>

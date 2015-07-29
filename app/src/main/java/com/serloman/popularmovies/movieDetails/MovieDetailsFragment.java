@@ -1,5 +1,6 @@
 package com.serloman.popularmovies.movieDetails;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -70,6 +71,8 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     private ViewPager mViewPager;
     private PagerAdapter mAdapter;
 
+    private MovieDetailsListener mMovieListener;
+
     public MovieDetailsFragment() { }
 
     @Override
@@ -90,6 +93,14 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if(activity instanceof MovieDetailsListener)
+            this.mMovieListener = (MovieDetailsListener) activity;
+    }
+
     private void initBasicData(){
         Movie movie = getBasicMovieData();
 
@@ -97,7 +108,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         initBackDrop(movie);
         initMovieData(movie);
         initGallery(movie);
-        initReviews(movie);
+        initScoreTouch();
     }
 
     private Movie getBasicMovieData(){
@@ -123,6 +134,21 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         ((TextView) getView().findViewById(R.id.scoreVoteCountTextView)).setText(String.valueOf(movie.getVoteCount()));
 
         ((TextView) getView().findViewById(R.id.movieDetailsGenres)).setText(getGenres(movie));
+    }
+
+    private void initScoreTouch(){
+        View score = getView().findViewById(R.id.movieDetailsScore);
+        score.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openReviews();
+            }
+        });
+    }
+
+    private void openReviews(){
+        if(mMovieListener!=null)
+            mMovieListener.onScoreCLicked(getBasicMovieData());
     }
 
     private void notifyUser(){
@@ -281,10 +307,6 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl)));
     }
 
-    private void initReviews(Movie movie){
-//        ReviewsFragment fragment = ReviewsFragment.newInstance(movie);
-//        getChildFragmentManager().beginTransaction().replace(R.id.movieDetailsReviewsContainer, fragment).commit();
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -455,5 +477,9 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         }
 
 
+    }
+
+    public interface MovieDetailsListener{
+        void onScoreCLicked(Movie movie);
     }
 }

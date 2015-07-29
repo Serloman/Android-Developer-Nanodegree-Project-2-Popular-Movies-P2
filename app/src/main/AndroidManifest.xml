@@ -26,6 +26,7 @@
 
         <activity
             android:name=".movieDetails.MovieDetailsActivity"
+            android:launchMode="singleTop"
             android:label="@string/app_name">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -37,6 +38,15 @@
             android:name=".gallery.GalleryActivity"
             android:configChanges="orientation"
             android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name=".reviews.ReviewsActivity"
+            android:label="@string/reviews">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:configChanges="orientation"
+                android:value=".movieDetails.MovieDetailsActivity" />
         </activity>
 
     </application>

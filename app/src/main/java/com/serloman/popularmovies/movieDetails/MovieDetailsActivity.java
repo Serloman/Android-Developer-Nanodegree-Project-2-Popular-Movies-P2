@@ -1,15 +1,20 @@
 package com.serloman.popularmovies.movieDetails;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.serloman.popularmovies.R;
+import com.serloman.popularmovies.reviews.ReviewsActivity;
+import com.serloman.popularmovies.movieDetails.MovieDetailsFragment.MovieDetailsListener;
 import com.serloman.themoviedb_api.models.Movie;
 
 /**
  * Created by Serloman on 20/07/2015.
  */
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsListener{
 
     public static final String ARG_MOVIE_DATA = "ARG_MOVIE_DATA";
 
@@ -72,5 +77,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
         outState.putBoolean(STATE_FULL_MOVIE, initFullMovie);
 
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onScoreCLicked(Movie movie) {
+//        boolean fullMode = isFullMode();
+//        if(!fullMode || (fullMode && !isLandscape()))
+            openReviewsActivity(movie);
+    }
+
+    private void openReviewsActivity(Movie movie){
+        Intent intent = new Intent(this, ReviewsActivity.class);
+        intent.putExtra(ReviewsActivity.ARG_MOVIE, (Parcelable) movie);
+        startActivity(intent);
+    }
+
+    private boolean isLandscape(){
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 }
