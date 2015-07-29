@@ -15,8 +15,10 @@
     <dimen name="movie_corner">4dp</dimen>
 
     <dimen name="detail_gallery_item_height">180dp</dimen>
+    <dimen name="detail_gallery_item_padding">40dp</dimen>
 
     <dimen name="cast_profile_pic">40dp</dimen>
 
     <dimen name="content_margin">60dp</dimen>
+
 </resources>

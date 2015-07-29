@@ -151,7 +151,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
     private void initBackDrop(Movie movie){
         ImageView backDrop = (ImageView) getView().findViewById(R.id.movieDetailsBackdrop);
-        Picasso.with(getActivity().getApplicationContext()).load(movie.getBackdropUrl(ImageMovie.Sizes.w500)).into(backDrop);
+        Picasso.with(getActivity().getApplicationContext()).load(movie.getBackdropUrl(ImageMovie.Sizes.w780)).into(backDrop);
 
         DefaultTheMovieDbApi api = new DefaultTheMovieDbApi(getActivity());
         api.getMovieVideosAsync(movie.getId(), this);
@@ -171,7 +171,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
     private void initMovieData(Movie movie){
         ImageView poster = (ImageView) getView().findViewById(R.id.movieDetailsPoster);
-        Picasso.with(getActivity().getApplicationContext()).load(movie.getPosterUrl(ImageMovie.Sizes.w185)).into(poster);
+        Picasso.with(getActivity().getApplicationContext()).load(movie.getPosterUrl(ImageMovie.Sizes.w500)).into(poster);
 
         ((TextView) getView().findViewById(R.id.movieDetailsTitle)).setText(movie.getTitle());
         ((TextView) getView().findViewById(R.id.movieDetailsOverview)).setText(movie.getOverview());
@@ -410,7 +410,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
             ImageMovie image = mImages.get(position);
 
             ImageView galleryImage = (ImageView) rootView.findViewById(R.id.galleryImageMovie);
-            Picasso.with(mContext).load(image.getUrl(ImageMovie.Sizes.w500)).into(galleryImage);
+            Picasso.with(mContext).load(image.getUrl(ImageMovie.Sizes.w780)).into(galleryImage);
 
             setOnItemClickListener(rootView, position);
 
