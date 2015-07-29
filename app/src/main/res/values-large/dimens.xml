@@ -3,6 +3,6 @@
     <dimen name="detail_poster_height">300dp</dimen>
     <dimen name="detail_poster_width">180dp</dimen>
 
-    <dimen name="detail_gallery_item_height">320dp</dimen>
-    <dimen name="detail_gallery_item_padding">180dp</dimen>
+    <dimen name="detail_gallery_item_height">300dp</dimen>
+    <dimen name="detail_gallery_item_padding">160dp</dimen>
 </resources>

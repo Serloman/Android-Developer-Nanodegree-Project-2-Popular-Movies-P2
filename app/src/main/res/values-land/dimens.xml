@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="detail_gallery_item_padding">160dp</dimen>
+</resources>

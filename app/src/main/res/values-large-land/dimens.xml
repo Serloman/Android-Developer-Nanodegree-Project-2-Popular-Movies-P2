@@ -1,3 +1,4 @@
 <resources>
-    <dimen name="detail_gallery_item_height">200dp</dimen>
+    <dimen name="detail_gallery_item_height">220dp</dimen>
+    <dimen name="detail_gallery_item_padding">80dp</dimen>
 </resources>

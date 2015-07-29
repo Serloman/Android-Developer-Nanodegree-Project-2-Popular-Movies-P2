@@ -182,18 +182,13 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         mViewPager.setPageMargin(20);
         mViewPager.setClipToPadding(false);
 
-        int paddingSiblings = getPaddingSiblings();
+        int paddingSiblings = getResources().getDimensionPixelSize(R.dimen.detail_gallery_item_padding);
         mViewPager.setPadding(paddingSiblings, 0, paddingSiblings, 0);
 
         DefaultTheMovieDbApi api = new DefaultTheMovieDbApi(getActivity());
         api.getMovieImagesAsync(movie.getId(), this);
     }
 
-    private int getPaddingSiblings(){
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-            return 240; //return 480;
-        return 120;
-    }
 
     @Override
     public void onMovieMediaDataReceived(MovieImages movieMedia) {
