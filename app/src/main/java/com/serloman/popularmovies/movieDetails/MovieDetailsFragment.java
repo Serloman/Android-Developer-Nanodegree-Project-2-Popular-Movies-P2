@@ -69,7 +69,6 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     private FullMovie mMovie;
     private ViewPager mViewPager;
     private PagerAdapter mAdapter;
-    private MenuItem mButtonFav;
 
     public MovieDetailsFragment() { }
 
@@ -289,11 +288,14 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
         inflater.inflate(R.menu.menu_movie_details, menu);
 
-        mButtonFav = menu.findItem(R.id.action_fav);
-        updateFavButton();
+        MenuItem mButtonFav = menu.findItem(R.id.action_fav);
+        updateFavButton(mButtonFav);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private boolean isFavMovie(){
@@ -301,7 +303,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         return fav.isFavourited(getBasicMovieData().getId());
     }
 
-    private void updateFavButton(){
+    private void updateFavButton(MenuItem mButtonFav){
         if(isFavMovie())
             mButtonFav.setIcon(R.drawable.ic_action_important);
         else
@@ -312,32 +314,32 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_fav:
-                favAction();
+                favAction(item);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void favAction(){
+    private void favAction(MenuItem item){
         if(isFavMovie())
-            unfavMovie();
+            unfavMovie(item);
         else
-            favMovie();
+            favMovie(item);
     }
 
-    private void favMovie(){
+    private void favMovie(MenuItem item){
         FavouriteMovies fav = new FavouriteMovies(getActivity());
         long idRow = fav.saveFavourite(getBasicMovieData());
 
-        mButtonFav.setIcon(R.drawable.ic_action_important);
+        item.setIcon(R.drawable.ic_action_important);
     }
 
-    private void unfavMovie(){
+    private void unfavMovie(MenuItem item){
         FavouriteMovies fav = new FavouriteMovies(getActivity());
         fav.deleteFavourite(getBasicMovieData());
 
-        mButtonFav.setIcon(R.drawable.ic_action_not_important);
+        item.setIcon(R.drawable.ic_action_not_important);
     }
 
     private static class TakeListLoader extends AsyncTaskLoader<FullMovie> {

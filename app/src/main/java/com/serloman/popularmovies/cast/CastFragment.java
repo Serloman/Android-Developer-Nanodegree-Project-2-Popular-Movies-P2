@@ -81,6 +81,8 @@ public class CastFragment extends Fragment implements MovieCreditsCallback{
     }
 
     private void hideLoading(){
-        getView().findViewById(R.id.castProgressBar).setVisibility(View.GONE);
+        View rootView = getView();
+        if(rootView!=null)
+            rootView.findViewById(R.id.castProgressBar).setVisibility(View.GONE);
     }
 }
