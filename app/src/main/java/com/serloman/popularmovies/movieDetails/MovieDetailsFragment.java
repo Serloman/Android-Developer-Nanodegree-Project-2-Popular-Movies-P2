@@ -124,14 +124,13 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     }
 
     private void updateUI(FullMovie movie){
+        mMovie = movie;
+
         ((TextView) getView().findViewById(R.id.movieDetailsTagline)).setText(movie.getTagline());
         ((TextView) getView().findViewById(R.id.movieDetailsReleaseDate)).setText(movie.getReleaseDate());
         TextView homepage = ((TextView) getView().findViewById(R.id.movieDetailsHomePage));
         homepage.setText(getHomepageLink(movie.getHomePage()));
         homepage.setMovementMethod(LinkMovementMethod.getInstance());
-
-        ((TextView) getView().findViewById(R.id.scoreVoteAverageTextView)).setText(String.valueOf(movie.getVoteAverage()));
-        ((TextView) getView().findViewById(R.id.scoreVoteCountTextView)).setText(String.valueOf(movie.getVoteCount()));
 
         ((TextView) getView().findViewById(R.id.movieDetailsGenres)).setText(getGenres(movie));
     }
@@ -200,6 +199,9 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
         ((TextView) getView().findViewById(R.id.movieDetailsTitle)).setText(movie.getTitle());
         ((TextView) getView().findViewById(R.id.movieDetailsOverview)).setText(movie.getOverview());
+
+        ((TextView) getView().findViewById(R.id.scoreVoteAverageTextView)).setText(String.valueOf(movie.getVoteAverage()));
+        ((TextView) getView().findViewById(R.id.scoreVoteCountTextView)).setText(String.valueOf(movie.getVoteCount()));
     }
 
     private void initGallery(Movie movie){
