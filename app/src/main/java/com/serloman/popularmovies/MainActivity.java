@@ -3,6 +3,8 @@ package com.serloman.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,10 +19,12 @@ import android.widget.Spinner;
 import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
 import com.serloman.popularmovies.movieDetails.FullMovieDetailsFragment;
 import com.serloman.popularmovies.movieDetails.MovieDetailsActivity;
+import com.serloman.popularmovies.movieDetails.MovieDetailsFragment;
 import com.serloman.popularmovies.movieList.BasicMovieListFragment;
+import com.serloman.popularmovies.reviews.ReviewsActivity;
 import com.serloman.themoviedb_api.models.Movie;
 
-public class MainActivity extends AppCompatActivity implements BasicMovieListFragment.OpenMovieListener, AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BasicMovieListFragment.OpenMovieListener, AdapterView.OnItemSelectedListener, MovieDetailsFragment.MovieDetailsListener {
 
     public final static String ARG_MOVIE_TYPE_SELECTED = "ARG_MOVIE_TYPE_SELECTED";
 
@@ -128,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
 
     private int getLandscapeNumColumns(){
         if(isTablet())
-            return 6;
+            return 2;
         return 4;
     }
 
@@ -162,8 +166,8 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
 
     @Override
     public void openMovie(Movie movie) {
-/** /
-        if(isTablet())
+/**/
+        if(isTablet() && isLandscape())
             openDetailsInFragment(movie);
         else
 /**/
@@ -177,12 +181,16 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
     }
 
     private void openDetailsInFragment(Movie movie){
-        FullMovieDetailsFragment fragment = FullMovieDetailsFragment.newInstance(movie);
+        MovieDetailsFragment fragment = MovieDetailsFragment.newInstance(movie);
         getSupportFragmentManager().beginTransaction().replace(R.id.mainActivityDetailsContainer, fragment).commit();
     }
 
     private boolean isTablet(){
         return findViewById(R.id.mainActivityDetailsContainer) != null;
+    }
+
+    private boolean isLandscape(){
+        return this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     @Deprecated
@@ -202,5 +210,12 @@ public class MainActivity extends AppCompatActivity implements BasicMovieListFra
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onScoreClicked(Movie movie) {
+        Intent intent = new Intent(this, ReviewsActivity.class);
+        intent.putExtra(ReviewsActivity.ARG_MOVIE, (Parcelable) movie);
+        startActivity(intent);
     }
 }

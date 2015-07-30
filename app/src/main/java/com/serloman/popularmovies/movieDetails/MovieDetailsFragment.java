@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -160,7 +159,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
     private void openReviews(){
         if(mMovieListener!=null)
-            mMovieListener.onScoreCLicked(getBasicMovieData());
+            mMovieListener.onScoreClicked(getBasicMovieData());
     }
 
     private void notifyUser(){
@@ -517,6 +516,6 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     }
 
     public interface MovieDetailsListener{
-        void onScoreCLicked(Movie movie);
+        void onScoreClicked(Movie movie);
     }
 }

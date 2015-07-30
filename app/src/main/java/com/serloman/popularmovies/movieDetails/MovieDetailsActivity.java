@@ -80,7 +80,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     }
 
     @Override
-    public void onScoreCLicked(Movie movie) {
+    public void onScoreClicked(Movie movie) {
 //        boolean fullMode = isFullMode();
 //        if(!fullMode || (fullMode && !isLandscape()))
             openReviewsActivity(movie);
