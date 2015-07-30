@@ -1,9 +1,11 @@
 package com.serloman.popularmovies.data;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 import com.serloman.popularmovies.data.MovieContract.MovieEntry;
 import com.serloman.themoviedb_api.models.ImageMovie;
@@ -19,15 +21,82 @@ import java.util.List;
 public class FavouriteMovies {
 
     Context mContext;
-    private MovieDbHelper mMovieDbHelper;
 
     public FavouriteMovies(Context context){
         this.mContext = context;
 
-        mMovieDbHelper = new MovieDbHelper(context);
     }
 
-    public long saveFavourite(Movie movie){
+    public List<Movie> getFavouriteMovies(){
+        Uri uri = MovieProvider.CONTENT_URI;
+        String sortOrder = MovieEntry.COLUMN_NAME_DATE + " DESC";
+
+        ContentResolver contentResolver = mContext.getContentResolver();
+        Cursor cursor = contentResolver.query(uri, null, null, null, sortOrder);
+        cursor.moveToFirst();
+
+        List<Movie> favourites = new ArrayList<>();
+
+        if(cursor.getCount()>0){
+            do{
+                favourites.add(new DatabaseMovie(cursor));
+            }while (cursor.moveToNext());
+        }
+
+        return favourites;
+    }
+
+    public Movie getMovie(int idMovie){
+        ContentResolver contentResolver = mContext.getContentResolver();
+
+        String sortOrder = MovieEntry.COLUMN_NAME_DATE + " DESC";
+        Uri uri = MovieProvider.getMovieUri(idMovie);
+
+        Cursor cursor = contentResolver.query(uri, null, null, null, sortOrder);
+        cursor.moveToFirst();
+
+        if(cursor.getCount()<1)
+            return null;
+
+        return new DatabaseMovie(cursor);
+    }
+
+    public boolean isFavourited(int idMovie){
+        return getMovie(idMovie)!=null;
+    }
+
+    public Uri saveFavourite(Movie movie){
+        ContentValues values = new ContentValues();
+        values.put(MovieEntry.COLUMN_NAME_MOVIE_ID, String.valueOf(movie.getId()));
+        values.put(MovieEntry.COLUMN_NAME_TITLE, movie.getTitle());
+        values.put(MovieEntry.COLUMN_NAME_OVERVIEW, movie.getOverview());
+        values.put(MovieEntry.COLUMN_NAME_VOTE_AVERAGE, movie.getVoteAverage());
+        values.put(MovieEntry.COLUMN_NAME_VOTE_COUNT, movie.getVoteCount());
+        values.put(MovieEntry.COLUMN_NAME_BACKDROP, movie.getBackdropRelativePath());
+        values.put(MovieEntry.COLUMN_NAME_POSTER, movie.getPosterRelativePath());
+        values.put(MovieEntry.COLUMN_NAME_DATE, new Date().getTime());
+
+        if(movie.isAdult())
+            values.put(MovieEntry.COLUMN_NAME_IS_ADULT, 1);
+        else
+            values.put(MovieEntry.COLUMN_NAME_IS_ADULT, 0);
+
+        Uri uri = MovieProvider.CONTENT_URI;
+
+        ContentResolver contentResolver = mContext.getContentResolver();
+
+        return contentResolver.insert(uri, values);
+    }
+
+    public void deleteFavourite(Movie movie){
+        ContentResolver contentResolver = mContext.getContentResolver();
+        Uri uri = MovieProvider.getMovieUri(movie.getId());
+        contentResolver.delete(uri, null, null);
+    }
+
+/** /
+    @Deprecated
+    private long saveOldFavourite(Movie movie){
         ContentValues values = new ContentValues();
         values.put(MovieEntry.COLUMN_NAME_MOVIE_ID, String.valueOf(movie.getId()));
         values.put(MovieEntry.COLUMN_NAME_TITLE, movie.getTitle());
@@ -49,7 +118,8 @@ public class FavouriteMovies {
         return newRowId;
     }
 
-    public Movie getMovie(int idMovie){
+    @Deprecated
+    private Movie getOldMovie(int idMovie){
         SQLiteDatabase db = mMovieDbHelper.getReadableDatabase();
 
         String selection = MovieEntry.COLUMN_NAME_MOVIE_ID + "=?";
@@ -76,11 +146,8 @@ public class FavouriteMovies {
         return movie;
     }
 
-    public boolean isFavourited(int idMovie){
-        return getMovie(idMovie)!=null;
-    }
-
-    public void deleteFavourite(Movie movie){
+    @Deprecated
+    private void deleteOldFavourite(Movie movie){
         SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
 
         String selection = MovieEntry.COLUMN_NAME_MOVIE_ID + " = ?";
@@ -89,7 +156,8 @@ public class FavouriteMovies {
         db.delete(MovieEntry.TABLE_NAME, selection, selectionArgs);
     }
 
-    public List<Movie> getFavouriteMovies(){
+    @Deprecated
+    private List<Movie> getFavouriteMoviesOld(){
         SQLiteDatabase db = mMovieDbHelper.getReadableDatabase();
 
         Cursor cursor = db.query(
@@ -114,6 +182,7 @@ public class FavouriteMovies {
 
         return favourites;
     }
+/**/
 
     private static class DatabaseMovie implements Movie{
 

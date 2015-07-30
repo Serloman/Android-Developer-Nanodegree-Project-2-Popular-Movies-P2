@@ -49,6 +49,11 @@
                 android:value=".movieDetails.MovieDetailsActivity" />
         </activity>
 
+        <provider
+            android:name=".data.MovieProvider"
+            android:authorities="com.serloman.movies.provider" >
+        </provider>
+
     </application>
 
 </manifest>

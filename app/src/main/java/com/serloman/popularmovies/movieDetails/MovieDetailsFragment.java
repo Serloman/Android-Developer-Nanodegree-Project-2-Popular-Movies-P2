@@ -352,7 +352,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
     private void favMovie(MenuItem item){
         FavouriteMovies fav = new FavouriteMovies(getActivity());
-        long idRow = fav.saveFavourite(getBasicMovieData());
+        fav.saveFavourite(getBasicMovieData());
 
         item.setIcon(R.drawable.ic_action_important);
     }
