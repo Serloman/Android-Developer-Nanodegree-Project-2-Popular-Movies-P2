@@ -3,7 +3,6 @@ package com.serloman.popularmovies.movieDetails;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -26,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +35,7 @@ import com.serloman.popularmovies.data.FavouriteMovies;
 import com.serloman.popularmovies.gallery.GalleryActivity;
 import com.serloman.popularmovies.models.ParcelableDiscoverMovie;
 import com.serloman.popularmovies.models.ParcelableImageMovie;
+import com.serloman.popularmovies.models.ParcelableVideoMovie;
 import com.serloman.themoviedb_api.calls.MovieCallback;
 import com.serloman.themoviedb_api.calls.MovieImagesCallback;
 import com.serloman.themoviedb_api.calls.MovieVideosCallback;
@@ -55,6 +56,8 @@ import java.util.List;
  */
 public class MovieDetailsFragment extends Fragment implements MovieCallback, LoaderManager.LoaderCallbacks<FullMovie>, MovieImagesCallback, MovieVideosCallback {
 
+    private final static String STATUS_TRAILER_INFO = "STATUS_TRAILER_INFO";
+
     public final static String ARG_MOVIE_DATA = "ARG_MOVIE_DATA";
 
     public static MovieDetailsFragment newInstance(Movie movie){
@@ -67,17 +70,20 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         return fragment;
     }
 
-    private FullMovie mMovie;
     private ViewPager mViewPager;
     private PagerAdapter mAdapter;
 
     private MovieDetailsListener mMovieListener;
+    private ParcelableVideoMovie mTrailerInfo;
 
     public MovieDetailsFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.movie_details_fragment, container, false);
+
+        if(savedInstanceState!=null)
+            mTrailerInfo = savedInstanceState.getParcelable(STATUS_TRAILER_INFO);
 
         return rootView;
     }
@@ -99,6 +105,14 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
         if(activity instanceof MovieDetailsListener)
             this.mMovieListener = (MovieDetailsListener) activity;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if(mTrailerInfo!=null)
+            outState.putParcelable(STATUS_TRAILER_INFO, mTrailerInfo);
+
+        super.onSaveInstanceState(outState);
     }
 
     private void initBasicData(){
@@ -124,7 +138,6 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     }
 
     private void updateUI(FullMovie movie){
-        mMovie = movie;
 
         ((TextView) getView().findViewById(R.id.movieDetailsTagline)).setText(movie.getTagline());
         ((TextView) getView().findViewById(R.id.movieDetailsReleaseDate)).setText(movie.getReleaseDate());
@@ -268,8 +281,6 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
     @Override
     public void onLoadFinished(Loader<FullMovie> loader, FullMovie data) {
-        this.mMovie = data;
-
         onMovieDataReceived(data);
     }
 
@@ -280,9 +291,9 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
     @Override
     public void onMovieVideosDataReceived(List<VideoMovie> videos) {
-        final VideoMovie trailerInfo = getYoutubeTrailer(videos);
+        mTrailerInfo = new ParcelableVideoMovie(getYoutubeTrailer(videos));
 
-        if(trailerInfo!=null){
+        if(mTrailerInfo !=null){
             View playIcon = getView().findViewById(R.id.backdropPlayTrailer);
             playIcon.setVisibility(View.VISIBLE);
 
@@ -290,7 +301,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
             backdropContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    playYoutubeTrailer(trailerInfo);
+                    playYoutubeTrailer(mTrailerInfo);
                 }
             });
         }
@@ -304,7 +315,7 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
     }
 
     private void playYoutubeTrailer(VideoMovie trailerInfo){
-        String youtubeUrl = "https://www.youtube.com/watch?v=" + trailerInfo.getKey();
+        String youtubeUrl = VideoMovie.BASE_URL_YOUTUBE + trailerInfo.getKey();
 
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl)));
     }
@@ -316,8 +327,8 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
 
         inflater.inflate(R.menu.menu_movie_details, menu);
 
-        MenuItem mButtonFav = menu.findItem(R.id.action_fav);
-        updateFavButton(mButtonFav);
+        MenuItem fav = menu.findItem(R.id.action_fav);
+        updateFavButton(fav);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -339,6 +350,9 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         switch (item.getItemId()){
             case R.id.action_fav:
                 favAction(item);
+                return true;
+            case R.id.action_share_trailer:
+                shareTrailer();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -364,6 +378,27 @@ public class MovieDetailsFragment extends Fragment implements MovieCallback, Loa
         fav.deleteFavourite(getBasicMovieData());
 
         item.setIcon(R.drawable.ic_action_not_important);
+    }
+
+    private void shareTrailer(){
+        if(mTrailerInfo==null){
+            Toast.makeText(getActivity(), mTrailerInfo.getName(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent shareIntent = getShareIntent();
+        startActivity(shareIntent);
+    }
+
+    private Intent getShareIntent(){
+        String urlTrailer = VideoMovie.BASE_URL_YOUTUBE + mTrailerInfo.getKey();
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, urlTrailer);
+        sendIntent.setType("text/plain");
+
+        return sendIntent;
     }
 
     private static class TakeListLoader extends AsyncTaskLoader<FullMovie> {

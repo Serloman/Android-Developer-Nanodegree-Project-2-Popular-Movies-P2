@@ -19,4 +19,7 @@
 
     <string name="cast">Cast</string>
     <string name="reviews">Reviews</string>
+
+    <string name="share_video">Share the trailer</string>
+    <string name="share_video_error">Error trying to share the trailer</string>
 </resources>
