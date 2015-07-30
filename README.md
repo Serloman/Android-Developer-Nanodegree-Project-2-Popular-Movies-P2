@@ -15,6 +15,7 @@ Now, users can 'favourite' movies, view reviews and enjoy a better experience in
 <img style="max-width: 300px;" src="https://raw.githubusercontent.com/Serloman/Android-Developer-Nanodegree-Project-2-Popular-Movies-P2/master/resources/screenshot_6.jpg">
 <img style="max-width: 300px;" src="https://raw.githubusercontent.com/Serloman/Android-Developer-Nanodegree-Project-2-Popular-Movies-P2/master/resources/screenshot_tablet_2.jpg">
 <img style="max-width: 300px;" src="https://raw.githubusercontent.com/Serloman/Android-Developer-Nanodegree-Project-2-Popular-Movies-P2/master/resources/screenshot_tablet_1.jpg">
+<img style="max-width: 300px;" src="https://raw.githubusercontent.com/Serloman/Android-Developer-Nanodegree-Project-2-Popular-Movies-P2/master/resources/screenshot_tablet_3.jpg">
 
 *The api key for themoviedb has to be included in the app's manifest
 
